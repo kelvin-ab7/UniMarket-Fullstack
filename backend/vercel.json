@@ -1,0 +1,18 @@
+{
+  "version" : 2,
+  "builds": [
+    {
+      "src": "*.js",
+      "headers": {
+        "Access-Control-Allow-Origin": "https://student-business-1-0.vercel.app"
+      },
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/"
+    }
+  ]
+}
