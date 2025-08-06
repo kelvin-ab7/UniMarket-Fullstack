@@ -151,7 +151,7 @@ export default function Home() {
               <Link
                 key={index}
                 to={`/product/${product.id}`}
-                className="bg-white/10 backdrop-blur-md text-white w-44 h-60 p-2 rounded-lg shadow border border-white/10 hover:scale-105 transition"
+                className="bg-white/10 backdrop-blur-md text-black w-44 h-60 p-2 rounded-lg shadow border border-white/10 hover:scale-105 transition"
               >
                 <img
                   src={`http://localhost:3005/uploads/${product.image}`}

@@ -32,6 +32,7 @@ import StudentNeeds from "./Pages/Categories/StudentNeeds";
 import Others from "./Pages/Categories/Others";
 
 import { useAuthContext } from "./Components/authContext";
+import Nav from "./Components/NavBar";
 import "./App.css";
 
 export default function App() {
@@ -46,45 +47,48 @@ export default function App() {
   }, []);
 
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/search" element={<Search />} />
-      {/* <Route path="/sell" element={<Sell />} /> */}
-      <Route path="/sell" element={auth ? <Sell /> : <Login />} />
-      <Route path="/product/:id" element={<ShowProduct />} />
-      <Route path="/seller/:id" element={auth ? <ViewSeller /> : <Login />} />
-      {/* User Routes */}
-      <Route path="/profile" element={auth ? <Profile /> : <Login />} />
-      <Route
-        path="/edit-profile"
-        element={auth ? <EditProfile /> : <Login />}
-      />
-      <Route
-        path="/view-items/:id"
-        element={auth ? <ViewProduct /> : <Login />}
-      />
-      <Route
-        path="/edit-items/:id"
-        element={auth ? <EditProduct /> : <Login />}
-      />
-      {/* Messages Routes */}
-      <Route path="/messages" element={auth ? <Message /> : <Login />} />
-      <Route path="/chat/:id" element={auth ? <Chat /> : <Login />} />
-      {/* Categories Routes*/}
-      <Route path="/clothes" element={<Clothes />} />
-      <Route path="/food" element={<Food />} />
-      <Route path="/electronics" element={<Electronics />} />
-      <Route path="/home-appliances" element={<HomeAppliances />} />
-      <Route path="/services" element={<Services />} />
-      <Route path="/software" element={<Software />} />
-      <Route path="/Student-needs" element={<StudentNeeds />} />
-      <Route path="/others" element={<Others />} />
-      {/* Accounts Routes */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<SignUp />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/verify-otp" element={<VerifyOTP />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
-    </Routes>
+    <>
+      <Nav />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/search" element={<Search />} />
+        {/* <Route path="/sell" element={<Sell />} /> */}
+        <Route path="/sell" element={auth ? <Sell /> : <Login />} />
+        <Route path="/product/:id" element={<ShowProduct />} />
+        <Route path="/seller/:id" element={auth ? <ViewSeller /> : <Login />} />
+        {/* User Routes */}
+        <Route path="/profile" element={auth ? <Profile /> : <Login />} />
+        <Route
+          path="/edit-profile"
+          element={auth ? <EditProfile /> : <Login />}
+        />
+        <Route
+          path="/view-items/:id"
+          element={auth ? <ViewProduct /> : <Login />}
+        />
+        <Route
+          path="/edit-items/:id"
+          element={auth ? <EditProduct /> : <Login />}
+        />
+        {/* Messages Routes */}
+        <Route path="/messages" element={auth ? <Message /> : <Login />} />
+        <Route path="/chat/:id" element={auth ? <Chat /> : <Login />} />
+        {/* Categories Routes*/}
+        <Route path="/clothes" element={<Clothes />} />
+        <Route path="/food" element={<Food />} />
+        <Route path="/electronics" element={<Electronics />} />
+        <Route path="/home-appliances" element={<HomeAppliances />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/software" element={<Software />} />
+        <Route path="/Student-needs" element={<StudentNeeds />} />
+        <Route path="/others" element={<Others />} />
+        {/* Accounts Routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/verify-otp" element={<VerifyOTP />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+      </Routes>
+    </>
   );
 }

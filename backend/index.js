@@ -16,6 +16,8 @@ import message from "./routes/message.route.js";
 import category from "./routes/category.route.js";
 import MongoStore from "connect-mongo";
 import session from "express-session";
+// ✅ NEW: Import the searchRoutes
+import searchRoutes from "./routes/Sub-Routes/searchRoutes.js";
 
 // Load the environment variables
 dotenv.config();
@@ -29,23 +31,14 @@ connectDB();
 // EJS Middleware
 app.use(express.json());
 app.use(cookieParser());
-// app.use(cors());
+
 app.use(
   cors({
-    // origin: "https://student-business-1-0.vercel.app/",
-    origin: "http://localhost:5173",
-    // Adjust according to your frontend URL
+    origin: "http://localhost:5173", // Or your deployed frontend URL
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );
-// const corsOptions = {
-//   origin: "https://student-business-1-0.vercel.app",
-//   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-//   credentials: true, // If you need to send cookies or auth headers
-// };
-// app.use(cors(corsOptions));
-
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -66,10 +59,14 @@ app.get("/", (req, res) => {
   res.send("Hello from the backend!");
 });
 
+// ✅ Existing API routes
 app.use("/account", accountRoutes);
 app.use("/user", userInfo);
 app.use("/message", message);
 app.use("/category", category);
+
+// ✅ NEW: Mount the search routes under /user
+app.use("/search", searchRoutes); // e.g., /user/search?query=...
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

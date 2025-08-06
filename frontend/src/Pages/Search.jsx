@@ -1,265 +1,216 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { useSnackbar } from "notistack";
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faSliders,
-  faTimes,
-  faArrowUpAZ,
-  faArrowDownZA,
-  faArrowDownShortWide,
-  faArrowDownWideShort,
-  faSpinner,
-} from "@fortawesome/free-solid-svg-icons";
+import Layout from "../Components/Layout";
+import { Search, LoaderCircle } from "lucide-react";
 
-// Components
-import NavBar from "../Components/NavBar";
-import Footer from "../Components/Footer";
-
-export default function Search() {
-  const [query, setQuery] = useState("");
+const SearchPage = () => {
+  const [products, setProducts] = useState([]);
+  const [searchType, setSearchType] = useState("title");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [locationQuery, setLocationQuery] = useState("");
+  const [categoryQuery, setCategoryQuery] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
-  const [products, setProducts] = useState([]);
-  const [searchMode, setSearchMode] = useState("all");
-  const [category, setCategory] = useState("");
-  const { enqueueSnackbar } = useSnackbar();
-  const [sortedProducts, setSortedProducts] = useState([]);
+  const [sortType, setSortType] = useState("");
   const [loading, setLoading] = useState(false);
 
-const handleAllSearch = async () => {
-    setLoading(true);
+  const backendUrl = "http://localhost:3005";
+
+  const handleSearch = async () => {
     try {
-      const res = await axios.get(
-        `https://student-business-1-0-backend.vercel.app/user/search-product?query=${query}`,
-        { withCredentials: true }
-      );
+      setLoading(true);
+      let res;
+
+      switch (searchType) {
+        case "title":
+          res = await axios.get(`${backendUrl}/search/title/${searchQuery}`);
+          break;
+        case "location":
+          res = await axios.get(`${backendUrl}/search/location/${locationQuery}`);
+          break;
+        case "category":
+          res = await axios.get(`${backendUrl}/search/category/${categoryQuery}`);
+          break;
+        case "price":
+          res = await axios.get(
+            `${backendUrl}/search/price?min=${minPrice}&max=${maxPrice}`,
+            { withCredentials: true }
+          );
+          break;
+        default:
+          res = { data: [] };
+      }
+
       setProducts(res.data);
-      setSortedProducts(res.data);
-      setLoading(false);
-    } catch (error) {
-      enqueueSnackbar(error.response?.data?.msg || "Search failed", {
-        variant: "error",
-      });
+    } catch (err) {
+      console.error("Search failed:", err.message);
+    } finally {
       setLoading(false);
     }
   };
 
-  const handleSearchByTitle = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get(
-        `https://student-business-1-0-backend.vercel.app/user/search-by-title?query=${query}`,
-        { withCredentials: true }
-      );
-      setProducts(res.data);
-      setSortedProducts(res.data);
-      setLoading(false);
-    } catch (error) {
-      enqueueSnackbar(error.response?.data?.msg || "Search failed", {
-        variant: "error",
-      });
-      setLoading(false);
+  const handleSort = () => {
+    let sorted = [...products];
+    if (sortType === "az") {
+      sorted.sort((a, b) => a.title.localeCompare(b.title));
+    } else if (sortType === "za") {
+      sorted.sort((a, b) => b.title.localeCompare(a.title));
+    } else if (sortType === "priceLowHigh") {
+      sorted.sort((a, b) => a.price - b.price);
+    } else if (sortType === "priceHighLow") {
+      sorted.sort((a, b) => b.price - a.price);
     }
+    return sorted;
   };
 
-  const handleSearchByLocation = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get(
-        `https://student-business-1-0-backend.vercel.app/user/search-by-location?query=${query}`,
-        { withCredentials: true }
-      );
-      setProducts(res.data);
-      setSortedProducts(res.data);
-      setLoading(false);
-    } catch (error) {
-      enqueueSnackbar(error.response?.data?.msg || "Search failed", {
-        variant: "error",
-      });
-      setLoading(false);
-    }
-  };
-
-  const handleSearchByCategory = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get(
-        `https://student-business-1-0-backend.vercel.app/user/search-by-categoryandtitle?category=${category}&title=${query}`,
-        { withCredentials: true }
-      );
-      setProducts(res.data);
-      setSortedProducts(res.data);
-      setLoading(false);
-    } catch (error) {
-      enqueueSnackbar(error.response?.data?.msg || "Search failed", {
-        variant: "error",
-      });
-      setLoading(false);
-    }
-  };
-
-  const handleSearchByPriceRange = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get(
-        `https://student-business-1-0-backend.vercel.app/user/search-by-price-range?minPrice=${minPrice}&maxPrice=${maxPrice}`,
-        { withCredentials: true }
-      );
-      setProducts(res.data);
-      setSortedProducts(res.data);
-      setLoading(false);
-    } catch (error) {
-      enqueueSnackbar(error.response?.data?.msg || "Search failed", {
-        variant: "error",
-      });
-      setLoading(false);
-    }
-  };
-
-  const handleFilter = () => {
-    switch (searchMode) {
-      case "title":
-        handleSearchByTitle();
-        break;
-      case "location":
-        handleSearchByLocation();
-        break;
-      case "category":
-        handleSearchByCategory();
-        break;
-      case "price":
-        handleSearchByPriceRange();
-        break;
-      default:
-        handleAllSearch();
-    }
-  };
-
-  const sortProductsByNameInAscendingOrder = () => {
-    const sorted = [...products].sort((a, b) => a.title.localeCompare(b.title));
-    setSortedProducts(sorted);
-  };
-
-  const sortProductsByNameInDescendingOrder = () => {
-    const sorted = [...products].sort((a, b) => b.title.localeCompare(a.title));
-    setSortedProducts(sorted);
-  };
-
-  const sortProductsByPriceInAscendingOrder = () => {
-    const sorted = [...products].sort((a, b) => a.price - b.price);
-    setSortedProducts(sorted);
-  };
-
-  const sortProductsByPriceInDescendingOrder = () => {
-    const sorted = [...products].sort((a, b) => b.price - a.price);
-    setSortedProducts(sorted);
-  };
+  const sortedProducts = handleSort();
 
   const handleClear = () => {
-    setQuery("");
-    setCategory("");
+    setSearchQuery("");
+    setLocationQuery("");
+    setCategoryQuery("");
     setMinPrice("");
     setMaxPrice("");
     setProducts([]);
-    setSortedProducts([]);
-    setSearchMode("all");
+    setSearchType("title");
+    setSortType("");
   };
 
   return (
-    <div className="bg-secondary-100 min-h-screen text-white">
-      <NavBar />
+    <Layout>
+      <div className="min-h-screen bg-white text-black p-4">
+        <h1 className="text-3xl font-bold mb-6 text-center">Search Marketplace</h1>
 
-      <section
-        className="flex flex-col justify-center items-center w-full bg-cover bg-center bg-no-repeat py-40 px-4 text-white backdrop-blur-md"
-        style={{
-          backgroundImage: "url('/hero-bg.jpg')",
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
-          backgroundBlendMode: "overlay",
-        }}
-      >
-        <div className="w-full max-w-3xl">
-          <div className="flex flex-wrap gap-4 justify-center mb-8">
-            {searchMode !== "price" ? (
+        <div className="max-w-4xl mx-auto bg-gray-200 p-6 rounded-2xl shadow-md space-y-4">
+          <div className="flex flex-wrap gap-3 justify-center">
+            {["title", "location", "category", "price"].map((type) => (
+              <button
+                key={type}
+                className={`px-4 py-2 rounded-xl font-medium border ${
+                  searchType === type ? "bg-green-500 text-white" : "bg-white text-black"
+                }`}
+                onClick={() => setSearchType(type)}
+              >
+                {type[0].toUpperCase() + type.slice(1)}
+              </button>
+            ))}
+          </div>
+
+          {/* Inputs */}
+          <div className="flex flex-wrap gap-4 justify-center">
+            {searchType === "title" && (
               <input
                 type="text"
-                placeholder="Search products..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                className="w-full md:w-2/3 px-4 py-3 rounded-xl bg-white/10 border border-white/20 backdrop-blur-md focus:outline-none shadow-sm"
+                placeholder="Enter product title"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="px-4 py-2 rounded-xl text-black w-full sm:w-[500px]"
               />
-            ) : (
-              <div className="flex flex-col sm:flex-row gap-2 w-full">
+            )}
+
+            {searchType === "location" && (
+              <input
+                type="text"
+                placeholder="Enter location"
+                value={locationQuery}
+                onChange={(e) => setLocationQuery(e.target.value)}
+                className="px-4 py-2 rounded-xl text-black w-full sm:w-[500px]"
+              />
+            )}
+
+            {searchType === "category" && (
+              <input
+                type="text"
+                placeholder="Enter category"
+                value={categoryQuery}
+                onChange={(e) => setCategoryQuery(e.target.value)}
+                className="px-4 py-2 rounded-xl text-black w-full sm:w-[500px]"
+              />
+            )}
+
+            {searchType === "price" && (
+              <>
                 <input
                   type="number"
                   placeholder="Min Price"
                   value={minPrice}
                   onChange={(e) => setMinPrice(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 backdrop-blur-md shadow-sm"
+                  className="px-4 py-2 rounded-xl text-black w-36"
                 />
                 <input
                   type="number"
                   placeholder="Max Price"
                   value={maxPrice}
                   onChange={(e) => setMaxPrice(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 backdrop-blur-md shadow-sm"
+                  className="px-4 py-2 rounded-xl text-black w-36"
                 />
-              </div>
+              </>
             )}
+          </div>
+
+          <div className="flex gap-4 justify-center">
             <button
-              onClick={handleFilter}
-              className="px-6 py-2 rounded-full bg-green-400 hover:bg-green-500 text-white transition shadow-md"
+              onClick={handleSearch}
+              disabled={loading}
+              className="bg-green-500 hover:bg-green-600 hover:scale-105 transition px-6 py-2 rounded-xl text-white flex items-center gap-2"
             >
-              Search
+              {loading ? <LoaderCircle className="animate-spin" /> : <Search size={18} />}
+              {loading ? "Searching..." : "Search"}
             </button>
+
             <button
               onClick={handleClear}
-              className="px-6 py-2 rounded-full bg-red-500 hover:bg-red-600 text-white transition shadow-md"
+              className="bg-red-500 hover:bg-red-600 hover:scale-105 transition px-6 py-2 rounded-xl text-white"
             >
               Clear
             </button>
           </div>
-          <div className="flex gap-2 justify-center mb-6 flex-wrap">
-            <button onClick={() => setSearchMode("title")} className={`px-4 py-1 rounded-full ${searchMode === "title" ? "bg-green-400 text-white" : "bg-white/10 text-white hover:bg-white/20"}`}>Title</button>
-            <button onClick={() => setSearchMode("location")} className={`px-4 py-1 rounded-full ${searchMode === "location" ? "bg-green-400 text-white" : "bg-white/10 text-white hover:bg-white/20"}`}>Location</button>
-            <button onClick={() => setSearchMode("category")} className={`px-4 py-1 rounded-full ${searchMode === "category" ? "bg-green-400 text-white" : "bg-white/10 text-white hover:bg-white/20"}`}>Category</button>
-            <button onClick={() => setSearchMode("price")} className={`px-4 py-1 rounded-full ${searchMode === "price" ? "bg-green-400 text-white" : "bg-white/10 text-white hover:bg-white/20"}`}>Price</button>
-            <button onClick={() => setSearchMode("all")} className="px-4 py-1 rounded-full bg-white/10 text-white hover:bg-white/20">All</button>
-          </div>
-        </div>
-        {loading && <FontAwesomeIcon icon={faSpinner} spin size="2x" className="mt-6" />}
-      </section>
 
-      <section className="px-6 py-10">
-        <div className="flex justify-center gap-4 mb-6">
-          <FontAwesomeIcon icon={faArrowUpAZ} className="cursor-pointer hover:text-green-400" onClick={sortProductsByNameInAscendingOrder} />
-          <FontAwesomeIcon icon={faArrowDownZA} className="cursor-pointer hover:text-green-400" onClick={sortProductsByNameInDescendingOrder} />
-          <FontAwesomeIcon icon={faArrowDownShortWide} className="cursor-pointer hover:text-green-400" onClick={sortProductsByPriceInAscendingOrder} />
-          <FontAwesomeIcon icon={faArrowDownWideShort} className="cursor-pointer hover:text-green-400" onClick={sortProductsByPriceInDescendingOrder} />
+          {/* Sort options */}
+          {products.length > 0 && (
+            <div className="text-center">
+              <select
+                className="px-4 py-2 rounded-xl text-black mt-4"
+                value={sortType}
+                onChange={(e) => setSortType(e.target.value)}
+              >
+                <option value="">Sort</option>
+                <option value="az">Title A-Z</option>
+                <option value="za">Title Z-A</option>
+                <option value="priceLowHigh">Price Low-High</option>
+                <option value="priceHighLow">Price High-Low</option>
+              </select>
+            </div>
+          )}
         </div>
-        <div className="flex flex-wrap justify-center gap-6">
-          {sortedProducts.map((product, index) => (
+
+        {/* Product List */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10 max-w-6xl mx-auto">
+          {sortedProducts.map((product) => (
             <Link
-              key={index}
               to={`/product/${product._id}`}
-              className="bg-white/10 backdrop-blur-md border border-white/10 text-white rounded-2xl shadow-lg w-44 h-60 p-2 hover:scale-105 transition hover:shadow-2xl"
+              key={product._id}
+              className="bg-gray-200 rounded-2xl shadow-md hover:shadow-xl transition-all p-4"
             >
               <img
                 src={`http://localhost:3005/uploads/${product.image}`}
                 alt={product.title}
-                className="w-full h-32 object-cover rounded-xl"
+                className="w-full h-48 object-cover rounded-xl mb-4"
               />
-              <h3 className="text-sm font-semibold mt-2 truncate">{product.title}</h3>
-              <p className="text-green-400 font-medium text-sm">
-                GH₵ {Number(product.price).toFixed(2)}
-              </p>
+              <h2 className="text-xl font-semibold mb-2 capitalize">{product.title}</h2>
+              <p className="text-green-400 font-bold mt-2 text-lg">GH₵{product.price.toFixed(2)}</p>
             </Link>
           ))}
         </div>
-      </section>
 
-      <Footer />
-    </div>
+        {/* No results */}
+        {!loading && sortedProducts.length === 0 && (
+          <p className="text-center text-black mt-10">No products found.</p>
+        )}
+      </div>
+    </Layout>
   );
-}
+};
+
+export default SearchPage;

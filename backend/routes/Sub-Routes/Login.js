@@ -12,12 +12,12 @@ export const Login = async (req, res, next) => {
     }
     const user = await User.findOne({ email });
     if (!user) {
-      // res.send("User does not exist");
       return res.status(400).json({ msg: "User does not exist" });
-    } else if (!user.verified) {
-      // res.send("User has not been verified");
-      return res.status(400).json({ msg: "User has not been verified" });
-    } else {
+    }
+    // else if (!user.verified) {
+    //   return res.status(400).json({ msg: "User has not been verified" });
+    // }
+    else {
       const validPassword = await bcrypt.compare(password, user.password);
       if (validPassword) {
         // User logged in successfully, create a JWT

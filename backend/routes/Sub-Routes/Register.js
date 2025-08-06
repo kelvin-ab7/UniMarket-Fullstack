@@ -24,33 +24,27 @@ export const Register = async (req, res, next) => {
         email,
         password: hashedPassword,
         phone,
+        verified: true, // <-- Automatically verify user
       });
       await newUser.save();
-      // res.send("User registered successfully");
       res.status(200).json({
         msg: "User registered successfully",
       });
 
-      // generate token
-      const token = crypto.randomBytes(32).toString("hex");
-      const newToken = new Token({
-        userId: newUser._id,
-        token,
-      });
-      await newToken.save();
-      console.log("Token saved successfully");
-      const link = `http://localhost:3005/account/verify/${token}`;
-      await sendMailVerify(email, link);
-      console.log("Email sent successfully");
-      //
-      // jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
-      //   if (err) throw err;
-      //   res.json({ token });
+      // The following code is disabled for now:
+      // // generate token
+      // const token = crypto.randomBytes(32).toString("hex");
+      // const newToken = new Token({
+      //   userId: newUser._id,
+      //   token,
       // });
-      //
+      // await newToken.save();
+      // console.log("Token saved successfully");
+      // const link = `http://localhost:3005/account/verify/${token}`;
+      // await sendMailVerify(email, link);
+      // console.log("Email sent successfully");
     }
   } catch (error) {
-    // res.send(error.message);
     res.status(500).json({ msg: error.message });
   }
 };
