@@ -1,3 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Custom styles for profile page */
+.profile-container {
+  padding-top: 80px; /* Adjust based on your navbar height */
+}
+
+/* Ensure proper spacing for fixed navbar */
+body {
+  scroll-padding-top: 80px;
+}
+
+/* Smooth transitions */
+* {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Custom gradient for profile cards */
+.gradient-border {
+  background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+  padding: 2px;
+  border-radius: 9999px;
+}
+
+.gradient-border > div {
+  background: white;
+  border-radius: 9999px;
+}

@@ -61,11 +61,17 @@ export default function EditProfile() {
     formData.append("image", image);
 
     try {
-      await axios.put("http://localhost:3005/user/update-profile", formData, {
+      const response = await axios.put("http://localhost:3005/user/update-profile", formData, {
         withCredentials: true,
       });
       enqueueSnackbar("Profile updated successfully", { variant: "success" });
-      navigate("/profile");
+      
+      // Force a page reload to ensure the profile page shows updated data
+      setTimeout(() => {
+        // Clear browser cache and reload
+        window.location.reload(true);
+        window.location.href = "/profile";
+      }, 1000);
     } catch (error) {
       enqueueSnackbar(error.response.data.msg, { variant: "error" });
     }

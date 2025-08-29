@@ -2,10 +2,26 @@ import { Product } from "../../models/Product.js";
 
 export const ClothesCategory = async (req, res) => {
   try {
-    const products = await Product.find({ category: "Clothes" }).sort({
-      createdAt: -1,
-    });
-    res.status(200).json(products);
+    const products = await Product.find({ category: "Clothes" })
+      .populate("user", "username vendorBadge")
+      .sort({ createdAt: -1 });
+    
+    const formattedProducts = products.map((product) => ({
+      _id: product._id,
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      image: product.image,
+      category: product.category,
+      location: product.location,
+      condition: product.condition,
+      negotiable: product.negotiable,
+      createdAt: product.createdAt,
+      updatedAt: product.updatedAt,
+      vendorBadge: product.user?.vendorBadge || 'none',
+    }));
+    
+    res.status(200).json(formattedProducts);
   } catch (error) {
     res
       .status(500)
@@ -15,10 +31,26 @@ export const ClothesCategory = async (req, res) => {
 
 export const ElectronicsCategory = async (req, res) => {
   try {
-    const products = await Product.find({ category: "Electronics" }).sort({
-      createdAt: -1,
-    });
-    res.status(200).json(products);
+    const products = await Product.find({ category: "Electronics" })
+      .populate("user", "username vendorBadge")
+      .sort({ createdAt: -1 });
+    
+    const formattedProducts = products.map((product) => ({
+      _id: product._id,
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      image: product.image,
+      category: product.category,
+      location: product.location,
+      condition: product.condition,
+      negotiable: product.negotiable,
+      createdAt: product.createdAt,
+      updatedAt: product.updatedAt,
+      vendorBadge: product.user?.vendorBadge || 'none',
+    }));
+    
+    res.status(200).json(formattedProducts);
   } catch (error) {
     res
       .status(500)
@@ -28,10 +60,26 @@ export const ElectronicsCategory = async (req, res) => {
 
 export const FoodCategory = async (req, res) => {
   try {
-    const products = await Product.find({ category: "Food" }).sort({
-      createdAt: -1,
-    });
-    res.status(200).json(products);
+    const products = await Product.find({ category: "Food" })
+      .populate("user", "username vendorBadge")
+      .sort({ createdAt: -1 });
+    
+    const formattedProducts = products.map((product) => ({
+      _id: product._id,
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      image: product.image,
+      category: product.category,
+      location: product.location,
+      condition: product.condition,
+      negotiable: product.negotiable,
+      createdAt: product.createdAt,
+      updatedAt: product.updatedAt,
+      vendorBadge: product.user?.vendorBadge || 'none',
+    }));
+    
+    res.status(200).json(formattedProducts);
   } catch (error) {
     res
       .status(500)
@@ -41,10 +89,26 @@ export const FoodCategory = async (req, res) => {
 
 export const HomeAppliancesCategory = async (req, res) => {
   try {
-    const products = await Product.find({ category: "Home Appliances" }).sort({
-      createdAt: -1,
-    });
-    res.status(200).json(products);
+    const products = await Product.find({ category: "Home Appliances" })
+      .populate("user", "username vendorBadge")
+      .sort({ createdAt: -1 });
+    
+    const formattedProducts = products.map((product) => ({
+      _id: product._id,
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      image: product.image,
+      category: product.category,
+      location: product.location,
+      condition: product.condition,
+      negotiable: product.negotiable,
+      createdAt: product.createdAt,
+      updatedAt: product.updatedAt,
+      vendorBadge: product.user?.vendorBadge || 'none',
+    }));
+    
+    res.status(200).json(formattedProducts);
   } catch (error) {
     res
       .status(500)
@@ -54,10 +118,26 @@ export const HomeAppliancesCategory = async (req, res) => {
 
 export const ServicesCategory = async (req, res) => {
   try {
-    const products = await Product.find({ category: "Services" }).sort({
-      createdAt: -1,
-    });
-    res.status(200).json(products);
+    const products = await Product.find({ category: "Services" })
+      .populate("user", "username vendorBadge")
+      .sort({ createdAt: -1 });
+    
+    const formattedProducts = products.map((product) => ({
+      _id: product._id,
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      image: product.image,
+      category: product.category,
+      location: product.location,
+      condition: product.condition,
+      negotiable: product.negotiable,
+      createdAt: product.createdAt,
+      updatedAt: product.updatedAt,
+      vendorBadge: product.user?.vendorBadge || 'none',
+    }));
+    
+    res.status(200).json(formattedProducts);
   } catch (error) {
     res
       .status(500)
@@ -67,10 +147,26 @@ export const ServicesCategory = async (req, res) => {
 
 export const SoftwareCategory = async (req, res) => {
   try {
-    const products = await Product.find({ category: "Software" }).sort({
-      createdAt: -1,
-    });
-    res.status(200).json(products);
+    const products = await Product.find({ category: "Software" })
+      .populate("user", "username vendorBadge")
+      .sort({ createdAt: -1 });
+    
+    const formattedProducts = products.map((product) => ({
+      _id: product._id,
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      image: product.image,
+      category: product.category,
+      location: product.location,
+      condition: product.condition,
+      negotiable: product.negotiable,
+      createdAt: product.createdAt,
+      updatedAt: product.updatedAt,
+      vendorBadge: product.user?.vendorBadge || 'none',
+    }));
+    
+    res.status(200).json(formattedProducts);
   } catch (error) {
     res
       .status(500)
@@ -80,10 +176,26 @@ export const SoftwareCategory = async (req, res) => {
 
 export const StudentNeedsCategory = async (req, res) => {
   try {
-    const products = await Product.find({ category: "Student Needs" }).sort({
-      createdAt: -1,
-    });
-    res.status(200).json(products);
+    const products = await Product.find({ category: "Student Needs" })
+      .populate("user", "username vendorBadge")
+      .sort({ createdAt: -1 });
+    
+    const formattedProducts = products.map((product) => ({
+      _id: product._id,
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      image: product.image,
+      category: product.category,
+      location: product.location,
+      condition: product.condition,
+      negotiable: product.negotiable,
+      createdAt: product.createdAt,
+      updatedAt: product.updatedAt,
+      vendorBadge: product.user?.vendorBadge || 'none',
+    }));
+    
+    res.status(200).json(formattedProducts);
   } catch (error) {
     res
       .status(500)
@@ -93,10 +205,26 @@ export const StudentNeedsCategory = async (req, res) => {
 
 export const OthersCategory = async (req, res) => {
   try {
-    const products = await Product.find({ category: "Others" }).sort({
-      createdAt: -1,
-    });
-    res.status(200).json(products);
+    const products = await Product.find({ category: "Others" })
+      .populate("user", "username vendorBadge")
+      .sort({ createdAt: -1 });
+    
+    const formattedProducts = products.map((product) => ({
+      _id: product._id,
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      image: product.image,
+      category: product.category,
+      location: product.location,
+      condition: product.condition,
+      negotiable: product.negotiable,
+      createdAt: product.createdAt,
+      updatedAt: product.updatedAt,
+      vendorBadge: product.user?.vendorBadge || 'none',
+    }));
+    
+    res.status(200).json(formattedProducts);
   } catch (error) {
     res
       .status(500)

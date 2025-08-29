@@ -8,6 +8,7 @@ import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
 // Component for Clothes category page
 import NavBar from "../../Components/NavBar";
 import CategoryNav from "../../Components/CategoryNav";
+import VendorBadge from "../../Components/VendorBadge";
 import MainImage from "../../assets/clothes.jpg";
 
 export default function Clothes() {
@@ -66,11 +67,20 @@ export default function Clothes() {
             to={`/product/${product._id}`}
             className="border border-primary-400 rounded-lg text-primary-400 bg-white w-36 h-52 sm:w-48 sm:h-64 overflow-hidden hover:shadow-lg mx-auto my-3"
           >
-            <img
-              src={`http://localhost:3005/uploads/${product.image}`}
-              alt="Product"
-              className="w-36 h-36 sm:w-48 sm:h-48 object-cover"
-            />
+            <div className="relative">
+              <img
+                src={`http://localhost:3005/uploads/${product.image}`}
+                alt="Product"
+                className="w-36 h-36 sm:w-48 sm:h-48 object-cover"
+              />
+              
+              {/* Vendor Badge */}
+              {product.vendorBadge && product.vendorBadge !== 'none' && (
+                <div className="absolute top-1 left-1">
+                  <VendorBadge badge={product.vendorBadge} size="sm" />
+                </div>
+              )}
+            </div>
             <div className="p-2">
               <h3 className="line-clamp-1 font-medium">{product.title}</h3>
               <p className="text-red-400">

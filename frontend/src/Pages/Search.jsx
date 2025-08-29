@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Layout from "../Components/Layout";
 import { Search, LoaderCircle } from "lucide-react";
+import { API_ENDPOINTS, API_BASE_URL, UPLOADS_URL } from "../config/api";
+import VendorBadge from "../Components/VendorBadge";
 
 const SearchPage = () => {
   const [products, setProducts] = useState([]);
@@ -15,7 +17,7 @@ const SearchPage = () => {
   const [sortType, setSortType] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const backendUrl = "http://localhost:3005";
+
 
   const handleSearch = async () => {
     try {
@@ -24,17 +26,17 @@ const SearchPage = () => {
 
       switch (searchType) {
         case "title":
-          res = await axios.get(`${backendUrl}/search/title/${searchQuery}`);
+          res = await axios.get(API_ENDPOINTS.searchTitle(searchQuery));
           break;
         case "location":
-          res = await axios.get(`${backendUrl}/search/location/${locationQuery}`);
+          res = await axios.get(API_ENDPOINTS.searchLocation(locationQuery));
           break;
         case "category":
-          res = await axios.get(`${backendUrl}/search/category/${categoryQuery}`);
+          res = await axios.get(API_ENDPOINTS.searchCategory(categoryQuery));
           break;
         case "price":
           res = await axios.get(
-            `${backendUrl}/search/price?min=${minPrice}&max=${maxPrice}`,
+            `${API_BASE_URL}/search/price?min=${minPrice}&max=${maxPrice}`,
             { withCredentials: true }
           );
           break;
@@ -193,11 +195,20 @@ const SearchPage = () => {
               key={product._id}
               className="bg-gray-200 rounded-2xl shadow-md hover:shadow-xl transition-all p-4"
             >
-              <img
-                src={`http://localhost:3005/uploads/${product.image}`}
-                alt={product.title}
-                className="w-full h-48 object-cover rounded-xl mb-4"
-              />
+              <div className="relative">
+                <img
+                  src={`${UPLOADS_URL}/${product.image}`}
+                  alt={product.title}
+                  className="w-full h-48 object-cover rounded-xl mb-4"
+                />
+                
+                {/* Vendor Badge */}
+                {product.vendorBadge && product.vendorBadge !== 'none' && (
+                  <div className="absolute top-2 left-2">
+                    <VendorBadge badge={product.vendorBadge} size="sm" />
+                  </div>
+                )}
+              </div>
               <h2 className="text-xl font-semibold mb-2 capitalize">{product.title}</h2>
               <p className="text-green-400 font-bold mt-2 text-lg">GH₵{product.price.toFixed(2)}</p>
             </Link>

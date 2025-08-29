@@ -9,28 +9,25 @@ import {
   faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import PropTypes from 'prop-types';
+import { API_ENDPOINTS, UPLOADS_URL } from "../config/api";
 
-// eslint-disable-next-line react/prop-types
 export default function Conversation({ selectedUser, userObject, className }) {
   const [messages, setMessages] = useState([]);
   const [products, setProducts] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
   const id = selectedUser;
-  // eslint-disable-next-line react/prop-types
   const image = userObject.profilePic;
-  // eslint-disable-next-line react/prop-types
   const name = userObject.username;
-  // eslint-disable-next-line react/prop-types
   // const linkId = userObject.id;
   // console.log(messages.receiverId);
-  // eslint-disable-next-line react/prop-types
 
   useEffect(() => {
     const fetchMessages = async () => {
-      try {
-        const res = await axios.get(`http://localhost:3005/message/${id}`, {
-          withCredentials: true,
-        });
+             try {
+         const res = await axios.get(API_ENDPOINTS.getMessages(id), {
+           withCredentials: true,
+         });
         setMessages(res.data);
       } catch (error) {
         enqueueSnackbar(error.response.data.msg, { variant: "error" });
@@ -41,13 +38,13 @@ export default function Conversation({ selectedUser, userObject, className }) {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      try {
-        const res = await axios.get(
-          "http://localhost:3005/account/get-product",
-          {
-            withCredentials: true,
-          }
-        );
+             try {
+         const res = await axios.get(
+           API_ENDPOINTS.getProducts,
+           {
+             withCredentials: true,
+           }
+         );
         setProducts(res.data);
       } catch (error) {
         enqueueSnackbar(error.response.data.msg, { variant: "error" });
@@ -82,11 +79,11 @@ export default function Conversation({ selectedUser, userObject, className }) {
         </Link>
         <div className="w-12 h-12 overflow-hidden mx-3 rounded-full border border-green-400">
           {image !== "" ? (
-            <img
-              src={`http://localhost:3005/uploads/${image}`}
-              alt="User"
-              className="w-full h-full object-cover"
-            />
+                         <img
+               src={`${UPLOADS_URL}/${image}`}
+               alt="User"
+               className="w-full h-full object-cover"
+             />
           ) : (
             <FontAwesomeIcon icon={faUser} className="w-12 h-12" />
           )}
@@ -108,11 +105,11 @@ export default function Conversation({ selectedUser, userObject, className }) {
               <div className="mx-auto bg-white w-32 py-2 rounded-md">
                 {/* productLink={`http://localhost:5173/product/${product.id}`} */}
                 <Link to={`/product/${message.link}`}>
-                  <img
-                    src={`http://localhost:3005/uploads/${message.image}`}
-                    alt="Product Pic"
-                    className="w-24 h-24 object-cover mx-auto"
-                  />
+                                     <img
+                     src={`${UPLOADS_URL}/${message.image}`}
+                     alt="Product Pic"
+                     className="w-24 h-24 object-cover mx-auto"
+                   />
                 </Link>
               </div>
             )}
@@ -139,8 +136,17 @@ export default function Conversation({ selectedUser, userObject, className }) {
               </div>
             </div>
           </div>
-        );
-      })}
-    </div>
-  );
-}
+                 );
+       })}
+     </div>
+   );
+ }
+
+Conversation.propTypes = {
+  selectedUser: PropTypes.string.isRequired,
+  userObject: PropTypes.shape({
+    profilePic: PropTypes.string,
+    username: PropTypes.string.isRequired,
+  }).isRequired,
+  className: PropTypes.string,
+};

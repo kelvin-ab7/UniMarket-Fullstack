@@ -9,15 +9,27 @@ export const useAuthContext = () => {
 
 // eslint-disable-next-line react/prop-types
 export const AuthContextProvider = ({ children }) => {
-  const [auth, setAuth] = useState(
-    JSON.parse(localStorage.getItem("chat-user")) || null
-  );
+  const [auth, setAuth] = useState(() => {
+    const storedAuth = localStorage.getItem("auth");
+    if (!storedAuth) return null;
+    
+    try {
+      // Try to parse as JSON first (for user objects)
+      return JSON.parse(storedAuth);
+    } catch (error) {
+      // If it's not valid JSON, it might be a token string
+      // In this case, we don't have user data, so return null
+      console.log("Invalid JSON in localStorage, clearing auth");
+      localStorage.removeItem("auth");
+      return null;
+    }
+  });
 
   useEffect(() => {
     if (auth) {
-      localStorage.setItem("chat-user", JSON.stringify(auth));
+      localStorage.setItem("auth", JSON.stringify(auth));
     } else {
-      localStorage.removeItem("chat-user");
+      localStorage.removeItem("auth");
     }
   }, [auth]);
 

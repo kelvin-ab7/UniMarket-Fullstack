@@ -70,7 +70,7 @@ export default function Sell() {
       enqueueSnackbar(res.data.msg, { variant: "success" });
 
       setTimeout(() => {
-        navigate("/");
+        navigate("/home");
       }, 1500);
     } catch (error) {
       enqueueSnackbar(

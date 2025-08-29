@@ -1,16 +1,13 @@
 import { useState } from "react";
 import { useSnackbar } from "notistack";
 import axios from "axios";
+import PropTypes from 'prop-types';
+import { API_ENDPOINTS } from "../config/api";
 
-// eslint-disable-next-line react/prop-types
 export default function SendMessage({
-  // eslint-disable-next-line react/prop-types
   receiverId,
-  // eslint-disable-next-line react/prop-types
   className,
-  // eslint-disable-next-line react/prop-types
   productId,
-  // eslint-disable-next-line react/prop-types
   productImage,
 }) {
   const [message, setMessage] = useState("");
@@ -22,19 +19,19 @@ export default function SendMessage({
       enqueueSnackbar("Please fill the form", { variant: "error" });
       return;
     }
-    try {
-      await axios.post(
-        `http://localhost:3005/message/send/${id}`,
-        {
-          to: id,
-          message,
-          image: productImage,
-          link: productId,
-        },
-        {
-          withCredentials: true,
-        }
-      );
+         try {
+       await axios.post(
+         API_ENDPOINTS.sendMessage(id),
+         {
+           to: id,
+           message,
+           image: productImage,
+           link: productId,
+         },
+         {
+           withCredentials: true,
+         }
+       );
       setMessage("");
       enqueueSnackbar("Message sent", { variant: "success" });
     } catch (error) {
@@ -61,3 +58,10 @@ export default function SendMessage({
     </div>
   );
 }
+
+SendMessage.propTypes = {
+  receiverId: PropTypes.string.isRequired,
+  className: PropTypes.string,
+  productId: PropTypes.string,
+  productImage: PropTypes.string,
+};

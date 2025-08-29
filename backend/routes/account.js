@@ -9,7 +9,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Routes
-import { Register, Verify } from "./Sub-Routes/Register.js";
+import { Register, VerifyOTP, ResendOTP, DeleteUser } from "./Sub-Routes/Register.js";
 import { Login, dashboard, Logout } from "./Sub-Routes/Login.js";
 import {
   sendingOTP,
@@ -23,6 +23,12 @@ import {
 } from "./Sub-Routes/ProductRoutes.js";
 import { GetSeller } from "./Sub-Routes/Profile.js";
 import { authMiddleware } from "../middleware/auth.js";
+import {
+  uploadStudentID,
+  getPendingVerifications,
+  verifyStudentID,
+  getUserVerificationStatus,
+} from "./Sub-Routes/StudentVerification.js";
 
 const router = express.Router();
 
@@ -47,8 +53,11 @@ router.get("/", (req, res) => {
 
 // account
 router.post("/register", Register);
+router.post("/verify-otp", VerifyOTP);
+router.post("/resend-otp", ResendOTP);
+router.post("/delete-user", DeleteUser);
 router.post("/login", Login);
-router.get("/verify/:token", Verify);
+
 router.post("/send-otp-password", sendingOTP);
 router.post("/verify-otp", verifyOTP);
 router.post("/reset-password", resetPassword);
@@ -62,5 +71,11 @@ router.post(
 );
 router.get("/get-product", GetProduct);
 router.get("/get-product/:id", GetProductId);
+
+// Student verification routes
+router.post("/upload-student-id", authMiddleware, uploadStudentID);
+router.get("/verification-status", authMiddleware, getUserVerificationStatus);
+router.get("/pending-verifications", authMiddleware, getPendingVerifications);
+router.post("/verify-student-id", authMiddleware, verifyStudentID);
 
 export default router;

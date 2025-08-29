@@ -7,7 +7,7 @@ import {
   faMessage,
   faSearch,
   faHome,
-  faArrowLeft,
+  faShieldAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { useSnackbar } from "notistack";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -17,6 +17,7 @@ import logo from "../assets/logo.png";
 
 function Nav() {
   const [open, setOpen] = useState(false);
+  const [user, setUser] = useState(null);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -41,6 +42,23 @@ function Nav() {
     setOpen(false);
   }, [location.pathname]);
 
+  // Fetch user data to check if admin
+  useEffect(() => {
+    if (auth) {
+      const fetchUser = async () => {
+        try {
+          const res = await axios.get("http://localhost:3005/user/get-profile", {
+            withCredentials: true,
+          });
+          setUser(res.data);
+        } catch (error) {
+          console.log("Failed to fetch user data:", error);
+        }
+      };
+      fetchUser();
+    }
+  }, [auth]);
+
   const handleLogout = async () => {
     try {
       await axios.get("http://localhost:3005/account/logout", {
@@ -62,16 +80,9 @@ function Nav() {
   return (
     <div className="fixed top-0 left-0 right-0 z-50 bg-gray-100 border-b border-gray-200 text-gray-900">
       <nav className="flex items-center justify-between px-6 py-3 max-w-7xl mx-auto">
-        {/* Back Button & Logo */}
+        {/* Logo */}
         <div className="flex items-center gap-3">
-          <button
-            onClick={() => navigate(-1)}
-            className="p-2 rounded-full hover:bg-gray-200 transition border border-gray-300"
-            aria-label="Go Back"
-          >
-            <FontAwesomeIcon icon={faArrowLeft} />
-          </button>
-          <Link to="/" className="flex items-center gap-2">
+          <Link to={auth ? "/home" : "/login"} className="flex items-center gap-2">
             {/* ✅ Updated logo usage */}
             <img
               src={logo}
@@ -87,7 +98,7 @@ function Nav() {
         {/* Navigation Buttons */}
         <ul className="flex gap-3 md:gap-5 items-center text-sm font-medium">
           <li>
-            <Link to="/" className={navLinkClass}>
+            <Link to="/home" className={navLinkClass}>
               <FontAwesomeIcon
                 icon={faHome}
                 className="p-2 rounded-xl hover:bg-gray-200 transition border border-gray-300"
@@ -127,6 +138,19 @@ function Nav() {
               </span>
             </Link>
           </li>
+          {user?.role === 'admin' && (
+            <li>
+              <Link to="/admin/dashboard" className={navLinkClass}>
+                <FontAwesomeIcon
+                  icon={faShieldAlt}
+                  className="p-2 rounded-xl hover:bg-gray-200 transition border border-gray-300 text-red-500"
+                />
+                <span className="absolute text-xs px-2 py-1 bg-black text-white rounded-md top-full mt-1 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 pointer-events-none transition">
+                  Admin
+                </span>
+              </Link>
+            </li>
+          )}
           <li>
             <button
               onClick={() => setOpen((prev) => !prev)}

@@ -32,11 +32,14 @@ export const GetSeller = async (req, res) => {
 
 export const GetProfile = async (req, res) => {
   try {
+    console.log("GetProfile called for user:", req.user._id);
     const user = await User.findById(req.user._id).select(
       "username email createdAt image phone bio"
     );
+    console.log("GetProfile returning user:", user);
     res.status(200).json(user);
   } catch (error) {
+    console.log("GetProfile error:", error.message);
     res
       .status(500)
       .json({ msg: "Internal server error", error: error.message });
@@ -45,25 +48,55 @@ export const GetProfile = async (req, res) => {
 
 export const UpdateProfile = async (req, res) => {
   try {
-    const imageName = req.file ? req.file.filename : undefined;
+    console.log("UpdateProfile called with:", {
+      body: req.body,
+      file: req.file ? req.file.filename : "no file",
+      userId: req.user._id
+    });
+
     const user = await User.findById(req.user._id);
     user.username = req.body.username;
     user.email = req.body.email;
     user.phone = req.body.phone;
-    imageName !== undefined
-      ? (user.image = imageName)
-      : (user.image = req.body.image);
     user.bio = req.body.bio;
+    
+    // Handle image update
+    if (req.file) {
+      // New image uploaded
+      console.log("New image uploaded:", req.file.filename);
+      user.image = req.file.filename;
+    } else if (req.body.image === "") {
+      // Image removed
+      console.log("Image removed");
+      user.image = "";
+    } else {
+      console.log("Keeping existing image:", user.image);
+    }
+    // If req.body.image has a value and no new file, keep existing image
+    
     if (!user.username || !user.email || !user.phone) {
       return res.status(400).json({ msg: "Please fill in all fields" });
     }
+    
     await user.save();
-    res.status(200).json({ msg: "Profile updated successfully" });
+    console.log("User saved with image:", user.image);
+    
+    // Return updated user data
+    const updatedUser = await User.findById(req.user._id).select(
+      "username email createdAt image phone bio"
+    );
+    
+    console.log("Returning updated user:", updatedUser);
+    
+    res.status(200).json({ 
+      msg: "Profile updated successfully",
+      user: updatedUser
+    });
   } catch (error) {
+    console.log("UpdateProfile error:", error.message);
     res
       .status(500)
       .json({ msg: "Internal server error", error: error.message });
-    console.log("error", error.message);
   }
 };
 

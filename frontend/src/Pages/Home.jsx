@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 // import { useNavigate } from "react-router-dom";
-import { Logo, CompanyName } from "../Components/Default";
+import { CompanyName } from "../Components/Default";
 import { useSnackbar } from "notistack";
 import { Link } from "react-router-dom";
+import { API_ENDPOINTS, UPLOADS_URL } from "../config/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faLocationDot,
   faCirclePlus,
   faUtensils,
   faBook,
@@ -17,6 +17,7 @@ import {
 
 import NavBar from "../Components/NavBar";
 import Footer from "../Components/Footer";
+import VendorBadge from "../Components/VendorBadge";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -24,18 +25,37 @@ export default function Home() {
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
 
+  // Prevent going back to login page
+  useEffect(() => {
+    // Replace the current history entry so back button doesn't work
+    window.history.replaceState(null, null, window.location.href);
+    
+    // Prevent going back
+    const handlePopState = (event) => {
+      window.history.pushState(null, null, window.location.href);
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, []);
+
   useEffect(() => {
     setLoading(true);
     const fetchProducts = async () => {
       try {
+        console.log("Fetching products from:", API_ENDPOINTS.getProducts);
         const res = await axios.get(
-          "http://localhost:3005/account/get-product",
-          { withCredentials: true }
+          API_ENDPOINTS.getProducts
         );
+        console.log("Products loaded:", res.data);
         setProducts(res.data);
         setLoading(false);
       } catch (error) {
-        enqueueSnackbar(error.response.data.msg, { variant: "error" });
+        console.error("Error loading products:", error);
+        enqueueSnackbar(error.response?.data?.msg || 'Failed to load products', { variant: "error" });
         setLoading(false);
       }
     };
@@ -145,6 +165,16 @@ export default function Home() {
           <div className="flex justify-center py-20">
             <FontAwesomeIcon icon={faSpinner} spin size="2x" className="text-black" />
           </div>
+        ) : products.length === 0 ? (
+          <div className="text-center py-20">
+            <p className="text-gray-600 mb-4">No products available yet.</p>
+            <Link 
+              to="/sell" 
+              className="bg-green-400 text-white px-6 py-2 rounded hover:bg-white hover:text-green-400 transition"
+            >
+              Be the first to sell!
+            </Link>
+          </div>
         ) : (
           <div className="flex flex-wrap gap-4 justify-center mt-6 px-4">
             {products.slice(0, displayedProducts).map((product, index) => (
@@ -153,18 +183,41 @@ export default function Home() {
                 to={`/product/${product.id}`}
                 className="bg-white/10 backdrop-blur-md text-black w-44 h-60 p-2 rounded-lg shadow border border-white/10 hover:scale-105 transition"
               >
-                <img
-                  src={`http://localhost:3005/uploads/${product.image}`}
-                  alt="Product"
-                  className="w-full h-32 object-cover rounded"
-                />
+                <div className="w-full h-32 bg-gray-200 rounded flex items-center justify-center relative">
+                  <img
+                    src={`${UPLOADS_URL}/${product.image}`}
+                    alt="Product"
+                    className="w-full h-full object-cover rounded"
+                    onError={(e) => {
+                      console.error("Image failed to load:", e.target.src);
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                    onLoad={() => {
+                      console.log("Image loaded successfully:", `${UPLOADS_URL}/${product.image}`);
+                    }}
+                  />
+                  <div className="hidden flex-col items-center justify-center text-gray-500 text-xs">
+                    <svg className="w-8 h-8 mb-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
+                    </svg>
+                    <span>No Image</span>
+                  </div>
+                  
+                  {/* Vendor Badge */}
+                  {product.vendorBadge && product.vendorBadge !== 'none' && (
+                    <div className="absolute top-2 left-2">
+                      <VendorBadge badge={product.vendorBadge} size="sm" />
+                    </div>
+                  )}
+                </div>
                 <h3 className="mt-2 font-semibold text-sm truncate">{product.title}</h3>
                 <p className="text-green-400 font-medium text-sm">GH₵ {Number(product.price).toFixed(2)}</p>
               </Link>
             ))}
           </div>
         )}
-        {displayedProducts < products.length && (
+        {products.length > 0 && displayedProducts < products.length && (
           <div className="text-center mt-6">
             <button
               className="bg-green-400 text-white px-6 py-2 rounded hover:bg-white hover:text-green-400 transition"

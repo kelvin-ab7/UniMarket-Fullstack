@@ -14,6 +14,8 @@ export default function Login() {
   const { enqueueSnackbar } = useSnackbar();
   const { setAuth } = useAuthContext();
 
+  console.log("Login component rendering");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -23,17 +25,29 @@ export default function Login() {
           email,
           password,
         },
-        { withCredentials: true },
-        { body: JSON.stringify({ email, password }) }
+        { withCredentials: true }
       );
 
-      const data = res.data.token;
+      const { token, user } = res.data;
+      
+      console.log("Login response:", res.data);
+      console.log("User object:", user);
+      console.log("User role:", user.role);
 
-      localStorage.setItem("auth", data);
-      setAuth(localStorage);
+      // Store the user object (not just the token) so we have access to role
+      localStorage.setItem("auth", JSON.stringify(user));
+      setAuth(user);
 
       enqueueSnackbar(res.data.msg, { variant: "success" });
-      navigate("/");
+      
+      // Redirect based on user role
+      if (user.role === 'admin') {
+        console.log("Redirecting to admin dashboard...");
+        navigate("/admin/dashboard");
+      } else {
+        console.log("Redirecting to home...");
+        navigate("/home");
+      }
     } catch (error) {
       console.log("ERROR: ", error.response.data.msg);
       enqueueSnackbar(error.response.data.msg, { variant: "error" });
