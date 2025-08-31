@@ -40,7 +40,7 @@ export default function ViewSeller() {
     <div>
       <NavBar />
       <div className="sm:flex justify-between items-center md:w-2/3 xl:w-1/2 m-5 max-sm:mx-2 md:mx-auto">
-        <div className="bg-secondary-100 rounded-full w-32 h-32 sm:w-40 sm:h-40 overflow-hidden border-2 border-green-500 max-sm:mx-auto">
+        <div className="bg-secondary-100 rounded-full w-32 h-32 sm:w-40 sm:h-40 overflow-hidden border-2 border-green-500 max-sm:mx-auto mt-8">
           {seller.image !== "" ? (
             <img
               src={`http://localhost:3005/uploads/${seller.image}`}
