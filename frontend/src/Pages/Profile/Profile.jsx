@@ -202,7 +202,7 @@ export default function Profile() {
             <div className="p-6 md:min-h-[33rem] bg-white rounded-3xl mb-5 shadow-lg border border-gray-100">
               <div className="flex flex-col items-center">
                 <div className="relative">
-                  <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-gradient-to-r from-blue-500 to-purple-600 bg-gradient-to-r from-blue-100 to-purple-100 shadow-lg">
+                  <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-gradient-to-r from-blue-500 to-purple-100 bg-gradient-to-r shadow-lg">
                                          {user.image !== "" ? (
                        <img
                          key={`${user.image}-${refreshKey}-${Date.now()}`}

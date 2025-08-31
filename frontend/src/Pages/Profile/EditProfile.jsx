@@ -78,9 +78,9 @@ export default function EditProfile() {
   };
 
   return (
-    <div className="bg-secondary-100">
+    <div className="bg-gray-100">
       <NavBar />
-      <h1 className="text-2xl md:text-3xl font-bold text-center my-4 sm:my-10">
+      <h1 className="text-3xl md:text-3xl font-bold text-center my-4 sm:my-12">
         Personal Details
       </h1>
       <form
