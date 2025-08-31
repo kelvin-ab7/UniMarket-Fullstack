@@ -44,7 +44,7 @@ export default function Message() {
   }, [enqueueSnackbar]);
 
   return (
-    <div className="md:bg-secondary-100">
+    <div className="mt-16 md:bg-secondary-100">
       <NavBar />
       {isWide ? (
         // Desktop View

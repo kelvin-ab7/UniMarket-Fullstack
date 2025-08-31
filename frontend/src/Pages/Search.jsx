@@ -210,7 +210,7 @@ const SearchPage = () => {
                 )}
               </div>
               <h2 className="text-xl font-semibold mb-2 capitalize">{product.title}</h2>
-              <p className="text-green-400 font-bold mt-2 text-lg">GH₵{product.price.toFixed(2)}</p>
+              <p className="text-green-500 font-bold mt-2 text-lg">GH₵{product.price.toFixed(2)}</p>
             </Link>
           ))}
         </div>

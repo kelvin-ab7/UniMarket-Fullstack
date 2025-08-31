@@ -8,6 +8,7 @@ import {
   faSearch,
   faHome,
   faShieldAlt,
+  faArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import { useSnackbar } from "notistack";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -79,9 +80,18 @@ function Nav() {
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 bg-gray-100 border-b border-gray-200 text-gray-900">
-      <nav className="flex items-center justify-between px-6 py-3 max-w-7xl mx-auto">
-        {/* Logo */}
+      <nav className="flex items-center justify-between px-6 py-1 max-w-7xl mx-auto">
+        {/* Left side: Back button + Logo */}
         <div className="flex items-center gap-3">
+          {/* Back Button */}
+          <button
+            onClick={() => navigate(-1)}
+            className="p-2 rounded-xl hover:bg-gray-200 transition border border-gray-300 mr-1"
+            aria-label="Go Back"
+            type="button"
+          >
+            <FontAwesomeIcon icon={faArrowLeft} />
+          </button>
           <Link to={auth ? "/home" : "/login"} className="flex items-center gap-2">
             {/* ✅ Updated logo usage */}
             <img
@@ -94,7 +104,6 @@ function Nav() {
             </span>
           </Link>
         </div>
-
         {/* Navigation Buttons */}
         <ul className="flex gap-3 md:gap-5 items-center text-sm font-medium">
           <li>

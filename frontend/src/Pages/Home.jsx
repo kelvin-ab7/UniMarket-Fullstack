@@ -89,13 +89,13 @@ export default function Home() {
           Buy & Sell on Campus Easily
         </h1>
         <p className="text-lg mt-4 max-w-xl">
-          Welcome to <span className="text-green-400">{CompanyName}</span>, the trusted student marketplace.
+          Welcome to <span className="text-green-500">{CompanyName}</span>, the trusted student marketplace.
         </p>
         <div className="mt-6 flex gap-4">
           <Link to="/search" className="bg-white text-black px-6 py-2 rounded shadow hover:bg-green-400 hover:text-white transition">
             Explore Products
           </Link>
-          <Link to="/sell" className="bg-green-400 text-white px-6 py-2 rounded shadow hover:bg-white hover:text-green-400 transition">
+          <Link to="/sell" className="bg-green-500 text-white px-6 py-2 rounded shadow hover:bg-white hover:text-green-400 transition">
             Start Selling
           </Link>
         </div>
@@ -211,8 +211,8 @@ export default function Home() {
                     </div>
                   )}
                 </div>
-                <h3 className="mt-2 font-semibold text-sm truncate">{product.title}</h3>
-                <p className="text-green-400 font-medium text-sm">GH₵ {Number(product.price).toFixed(2)}</p>
+                <h3 className="text-xl font-semibold mb-2 capitalize">{product.title}</h3>
+                <p className="text-green-500 font-semibold text-lg">GH₵ {Number(product.price).toFixed(2)}</p>
               </Link>
             ))}
           </div>

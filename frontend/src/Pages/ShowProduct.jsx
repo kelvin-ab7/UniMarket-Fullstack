@@ -92,24 +92,24 @@ export default function ShowProduct() {
         <div className="mx-auto w-10/12 md:mt-10">
           <div className="bg-secondary-100 p-2 rounded-lg max-md:mt-4">
             <p className="text-primary-400 font-bold">{product.title}</p>
-            <p className="text-red-400 font-semibold">
+            <p className="text-green-500 font-bold">
               GH&#8373; {Number(product.price).toFixed(2)}
             </p>
             <p>
-              <FontAwesomeIcon icon={faLocationDot} className="text-red-400" />{" "}
+              <FontAwesomeIcon icon={faLocationDot} className="text-green-500" />{" "}
               {product.location}
             </p>
           </div>
           <div className="bg-secondary-100 p-2 rounded-lg mt-4">
             <p className="text-primary-400 font-bold">
-              <FontAwesomeIcon icon={faUser} className="mr-1 text-red-400" />
+              <FontAwesomeIcon icon={faUser} className="mr-1 text-green-500" />
               {product.postedBy}
             </p>
             <p>
               Category:{" "}
               <Link
                 to={`/${product.category}`}
-                className="text-red-400 font-bold"
+                className="text-primary-400 font-bold"
               >
                 {product.category}
               </Link>
@@ -121,7 +121,7 @@ export default function ShowProduct() {
           </div>
           <div>
             <button
-              className="bg-red-400 text-white font-semibold py-2 px-4 rounded-lg mt-4 mx-auto w-full hover:bg-white border border-red-400 hover:text-red-400"
+              className="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg mt-4 mx-auto w-full hover:bg-white border border-green-500 hover:text-black"
               onClick={
                 auth
                   ? () => setShowMessage((prev) => !prev)
@@ -140,7 +140,7 @@ export default function ShowProduct() {
               />
             )}
             <Link to={auth ? `/seller/${product.id}` : "/login"}>
-              <button className="bg-red-400 text-white font-semibold py-2 px-4 rounded-lg mt-4 mx-auto w-full hover:bg-white border border-red-400 hover:text-red-400">
+              <button className="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg mt-4 mx-auto w-full hover:bg-white border border-green-500 hover:text-black">
                 <FontAwesomeIcon icon={faUser} className="mr-3" /> View Seller
                 Profile
               </button>
@@ -218,7 +218,7 @@ export default function ShowProduct() {
               />
               <button
                 onClick={handlePostComment}
-                className="mx-2 p-2 bg-red-400 text-white border-red-400 border hover:bg-white hover:text-red-400 rounded-lg"
+                className="mx-2 p-2 bg-green-400 text-white border-green-400 border hover:bg-white hover:text-black rounded-lg"
               >
                 Post
               </button>
