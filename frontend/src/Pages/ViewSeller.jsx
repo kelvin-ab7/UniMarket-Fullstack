@@ -40,7 +40,7 @@ export default function ViewSeller() {
     <div>
       <NavBar />
       <div className="sm:flex justify-between items-center md:w-2/3 xl:w-1/2 m-5 max-sm:mx-2 md:mx-auto">
-        <div className="bg-secondary-100 rounded-full w-32 h-32 sm:w-40 sm:h-40 overflow-hidden border-2 border-red-400 max-sm:mx-auto">
+        <div className="bg-secondary-100 rounded-full w-32 h-32 sm:w-40 sm:h-40 overflow-hidden border-2 border-green-500 max-sm:mx-auto">
           {seller.image !== "" ? (
             <img
               src={`http://localhost:3005/uploads/${seller.image}`}
@@ -56,19 +56,19 @@ export default function ViewSeller() {
         </div>
         <div className="bg-secondary-100 text-primary-400 p-2 rounded-lg max-sm:mx-auto max-sm:w-10/12 max-sm:my-5 font-semibold">
           <p>
-            <FontAwesomeIcon icon={faUser} className="text-red-400 mr-2" />{" "}
+            <FontAwesomeIcon icon={faUser} className="text-green-500 mr-2" />{" "}
             {seller.username}
           </p>
           <p>
             {" "}
             <FontAwesomeIcon
               icon={faEnvelope}
-              className="text-red-400 mr-2"
+              className="text-green-500 mr-2"
             />{" "}
             {seller.email}
           </p>
           <p>
-            <FontAwesomeIcon icon={faCalendar} className="text-red-400 mr-2" />{" "}
+            <FontAwesomeIcon icon={faCalendar} className="text-green-500 mr-2" />{" "}
             Joined:{" "}
             <span className="font-normal">
               {new Date(seller.yearJoin).toLocaleDateString()}
@@ -112,14 +112,14 @@ export default function ViewSeller() {
             </button>
           </Link> */}
           <Link to={`tel:0${seller.phone}`}>
-            <button className="bg-red-400 text-white font-semibold py-2 px-4 rounded-lg mt-4 mx-auto w-full hover:bg-white border border-red-400 hover:text-red-400">
+            <button className="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg mt-4 mx-auto w-full hover:bg-white border border-green-400 hover:text-black">
               <FontAwesomeIcon icon={faPhone} className="mr-3" /> 0
               {seller.phone}
             </button>
           </Link>
         </div>
       </div>
-      <h1 className="text-primary-400 text-center font-semibold text-2xl mt-5">
+      <h1 className="text-black text-center font-semibold text-2xl mt-5">
         Products by Seller
       </h1>
       <div className="flex flex-wrap sm:gap-2 my-4 lg:w-2/3 mx-5 lg:mx-auto">
@@ -127,7 +127,7 @@ export default function ViewSeller() {
           <Link
             key={index}
             to={`/product/${product.id}`}
-            className="border border-primary-400 rounded-lg text-primary-400 bg-white w-36 h-52 sm:w-48 sm:h-64 overflow-hidden hover:shadow-lg mx-auto my-3"
+            className="border border-green-400 rounded-lg text-black bg-secondary-100 w-36 h-52 sm:w-48 sm:h-64 overflow-hidden hover:shadow-lg mx-auto my-3"
           >
             <img
               src={`http://localhost:3005/uploads/${product.image}`}
@@ -135,8 +135,8 @@ export default function ViewSeller() {
               className="w-36 h-36 sm:w-48 sm:h-48 object-cover"
             />
             <div className="p-2">
-              <h3 className="line-clamp-1 font-medium">{product.title}</h3>
-              <p className="text-red-400">
+              <h3 className="line-clamp-1 font-bold">{product.title}</h3>
+              <p className="text-green-400 font-semibold">
                 GH&#8373; {Number(product.price).toFixed(2)}
               </p>
             </div>
