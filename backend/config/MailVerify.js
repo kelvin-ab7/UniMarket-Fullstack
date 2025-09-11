@@ -42,7 +42,7 @@ const sendMail = async (email, link) => {
                 If you didn't create an account with UniMarket, please ignore this email.
               </p>
               <p style="color: #718096; font-size: 12px; margin: 10px 0 0 0;">
-                © 2024 UniMarket - KNUST Student Marketplace
+                © 2025 UniMarket - KNUST Student Marketplace
               </p>
             </div>
           </div>
