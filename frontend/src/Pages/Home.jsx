@@ -74,7 +74,7 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-secondary-100">
+    <div className="bg-white">
       <NavBar />
 
       {/* Hero Section */}
@@ -109,7 +109,7 @@ export default function Home() {
             <Link
               to={cat.link}
               key={idx}
-              className="w-40 p-5 rounded-xl bg-white/40 text-black hover:bg-green-500 hover:text-white transition shadow-lg"
+              className="w-40 p-5 rounded-xl bg-white text-black hover:bg-green-500 hover:text-white transition shadow-lg"
             >
               <div className="flex flex-col items-center">
                 <FontAwesomeIcon icon={cat.icon} size="2x" />
